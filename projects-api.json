@@ -1,0 +1,275 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "s2-api-microservice-projects",
+    "description" : "Scenario Studio Projects API Microservice",
+    "version" : "1.0"
+  },
+  "servers" : [ {
+    "url" : "https://3yn0gpupeh.execute-api.us-east-1.amazonaws.com/{basePath}",
+    "variables" : {
+      "basePath" : {
+        "default" : "v3"
+      }
+    },
+    "x-amazon-apigateway-endpoint-configuration" : {
+      "vpcEndpointIds" : [ "vpce-049da9c000a16f37e" ]
+    }
+  } ],
+  "paths" : {
+    "/projects/{projectId}/export-data" : {
+      "post" : {
+        "operationId" : "postExportData",
+        "parameters" : [ {
+          "name" : "projectId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ScenarioExportData"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "400" : {
+            "description" : "400 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404" : {
+            "description" : "404 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "200" : {
+            "description" : "200 response",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/ArrayOfExportResult"
+                }
+              }
+            }
+          }
+        },
+        "security" : [ {
+          "apiAuthorizer" : [ ]
+        } ],
+        "x-amazon-apigateway-integration" : {
+          "httpMethod" : "POST",
+          "uri" : "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:240178093288:function:lf-s2-projects-api-v3-post-export-data/invocations",
+          "passthroughBehavior" : "when_no_match",
+          "type" : "aws_proxy"
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "ScenarioExportData" : {
+        "required" : [ "exportOptions", "scenarios", "searchOptions" ],
+        "type" : "object",
+        "properties" : {
+          "exportOptions" : {
+            "$ref" : "#/components/schemas/ScenarioDataExportOptions"
+          },
+          "searchOptions" : {
+            "$ref" : "#/components/schemas/SeriesSearchOptions"
+          },
+          "scenarios" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "uuid"
+            }
+          }
+        }
+      },
+      "ScenarioDataExportOptions" : {
+        "required" : [ "addFactors", "delimiter", "end", "frequency", "horizontal", "localData", "movingAverageResiduals", "numberFormat", "outputFields", "reconileFactors", "start" ],
+        "type" : "object",
+        "properties" : {
+          "outputFields" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "horizontal" : {
+            "type" : "boolean"
+          },
+          "numberFormat" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "reconileFactors" : {
+            "type" : "boolean"
+          },
+          "movingAverageResiduals" : {
+            "type" : "boolean"
+          },
+          "delimiter" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "localData" : {
+            "type" : "boolean"
+          },
+          "start" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "end" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "addFactors" : {
+            "type" : "boolean"
+          },
+          "frequency" : {
+            "type" : "integer",
+            "format" : "int32"
+          }
+        }
+      },
+      "SeriesSearchOptions" : {
+        "required" : [ "customSeries", "equationEdits", "historyEdits", "query", "scenarioId", "sharedown" ],
+        "type" : "object",
+        "properties" : {
+          "checkedOut" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "customSeries" : {
+            "type" : "boolean"
+          },
+          "historyEdits" : {
+            "type" : "boolean"
+          },
+          "query" : {
+            "type" : "string"
+          },
+          "equationEdits" : {
+            "type" : "boolean"
+          },
+          "localState" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "geographies" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "variableType" : {
+            "type" : "array",
+            "items" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "utcDateCreated" : {
+            "type" : "string",
+            "format" : "date-time"
+          },
+          "variableIds" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string"
+            }
+          },
+          "sharedown" : {
+            "type" : "boolean"
+          },
+          "sortBy" : {
+            "type" : "object",
+            "additionalProperties" : {
+              "type" : "integer",
+              "format" : "int32"
+            }
+          },
+          "state" : {
+            "type" : "integer",
+            "format" : "int32"
+          },
+          "scenarioId" : {
+            "type" : "array",
+            "items" : {
+              "type" : "string",
+              "format" : "uuid"
+            }
+          }
+        }
+      },
+      "ArrayOfExportResult" : {
+        "type" : "array",
+        "items" : {
+          "$ref" : "#/components/schemas/ExportResult"
+        }
+      },
+      "ErrorResponse" : {
+        "type" : "object",
+        "properties" : {
+          "error" : {
+            "type" : "string"
+          }
+        }
+      },
+      "ExportResult" : {
+        "type" : "object",
+        "properties" : {
+          "orderId" : {
+            "type" : "string"
+          },
+          "alias" : {
+            "type" : "string"
+          },
+          "childOrderId" : {
+            "type" : "string"
+          },
+          "scenarioId" : {
+            "type" : "string",
+            "format" : "uuid"
+          },
+          "isParentOrder" : {
+            "type" : "boolean"
+          }
+        }
+      }
+    },
+    "securitySchemes" : {
+      "apiAuthorizer" : {
+        "type" : "apiKey",
+        "name" : "Authorization",
+        "in" : "header",
+        "x-amazon-apigateway-authtype" : "custom"
+      }
+    }
+  },
+  "x-amazon-apigateway-policy" : {
+    "Version" : "2012-10-17",
+    "Statement" : [ {
+      "Effect" : "Allow",
+      "Principal" : "*",
+      "Action" : "execute-api:Invoke",
+      "Resource" : "arn:aws:execute-api:us-east-1:240178093288:3yn0gpupeh/*/*/*"
+    } ]
+  }
+}
